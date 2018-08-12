@@ -1,48 +1,37 @@
 <template>
-    <div>
-        <i v-if="type ==='like'" class="far fa-thumbs-up color_green like pointer" @click="changeLike">{{like}}</i>
-        <i v-else-if="type ==='disLike'" class="far fa-thumbs-down color_red dis_like pointer"  @click="changeLike">{{dis_like}}</i>
+    <div class="float-right">
+        <i v-if="type ==='like'" class="far fa-thumbs-up color_green pointer" @click="changeLike">{{like}}</i>
+        <i v-else-if="type ==='disLike'" class="far fa-thumbs-down color_red pointer" @click="changeLike">{{dis_like}}</i>
         <i v-else></i>
-        <span class="ml-2"></span>
     </div>
 </template>
 
 <script>
     import axios from '../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
+
     export default {
         name: "laravel_likeable_system",
-        props:['model','item','type'],
+        props: ['model', 'item', 'type'],
         data: function () {
-            return {
-
-            }
+            return {}
         },
         computed: {
-            like:{
-                get:function()
-                {
-                    if(this.item.likes)
-                    {
+            like: {
+                get: function () {
+                    if (this.item.likes) {
                         return this.item.likes.length;
                     }
-                    else
-                    {
-                        return 0 ;
+                    else {
+                        return 0;
                     }
                 },
-                set:function(value)
-                {
-                    this.like++;
-                }
             },
-            dis_like:function () {
-                if(this.item.dis_likes)
-                {
+            dis_like: function () {
+                if (this.item.dis_likes) {
                     return this.item.dis_likes.length;
                 }
-                else
-                {
-                    return 0 ;
+                else {
+                    return 0;
                 }
             }
         },
@@ -50,23 +39,37 @@
             changeLike: function () {
                 axios.post("/LLS/chnageLike", {encode_id: this.item.encode_id, model: this.model, type: this.type}).then(response => {
                     this.$nextTick(() => {
-                        if (response.data.success)
-                        {
-                            if (response.data.type =='like')
-                            {
-                                this.set('like');
+                        if (response.data.success) {
+                            if (response.data.type == 'like') {
+                               if(this.item.likes)
+                               {
+                                   this.item.likes.push([]) ;
+                               }
+                               else
+                               {
+                                   this.item.likes=[
+                                            {0:'1'}
+                                       ];
+                               }
+
                             }
-                            else if(response.data.type =='disLike')
-                            {
-                                this.dis_like ++;
+                            else if (response.data.type == 'disLike') {
+                                if(this.item.dis_likes)
+                                {
+                                    this.item.dis_likes.push([]) ;
+                                }
+                                else
+                                {
+                                    this.item.dis_likes=[
+                                        {0:'1'}
+                                    ];
+                                }
                             }
-                            else
-                            {
+                            else {
                                 console.log('you should chose type equal like or disLkie');
                             }
                         }
-                        else
-                        {
+                        else {
                             alert('Please check console log');
                             console.log(this.item);
                         }
@@ -79,5 +82,13 @@
 </script>
 
 <style scoped>
-
+    .color_green {
+        color:#27ae60;
+    }
+    .color_red{
+        color:red;
+    }
+    .float-right{
+        float:left!important;
+    }
 </style>
