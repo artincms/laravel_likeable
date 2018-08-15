@@ -1,28 +1,27 @@
 <template>
-    <div class="float-right" v-if="canVote">
-        <i class="far fa-thumbs-up color_green pointer" @click="changeLike('like')" :class="{bold:isActiveLike}">{{like}}</i>
-        <i class="far fa-thumbs-down color_red pointer" @click="changeLike('disLike')" :class="{bold:isActiveDislike}">{{dis_like}}</i>
-    </div>
-    <div class="float-right" v-else>
-        <i v-if="type ==='like'" class="far fa-thumbs-up color_gray ">{{like}}</i>
-        <i v-else-if="type ==='disLike'" class="far fa-thumbs-down color_gray">{{dis_like}}</i>
-        <i v-else></i>
+    <div>
+        <div v-if="auth" class="float-right">
+            <i class="far fa-thumbs-up color_green pointer" @click="changeLike('like')" :class="{bold:isActiveLike}">{{like}}</i>
+            <i class="far fa-thumbs-down color_red pointer" @click="changeLike('disLike')" :class="{bold:isActiveDislike}">{{dis_like}}</i>
+        </div>
+        <div v-else class="float-right">
+            <i class="far fa-thumbs-up color_gray ">{{like}}</i>
+            <i class="far fa-thumbs-down color_gray">{{dis_like}}</i>
+        </div>
     </div>
 </template>
-
 <script>
     import axios from '../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
 
     export default {
         name: "laravel_likeable_system",
-        props: ['model', 'item', 'type'],
+        props: ['model', 'item', 'type','auth'],
         data: function () {
             return {
-                canVote:true,
                 isActiveLike:false,
                 isActiveDislike:false,
-                like :this.item.likes.length,
-                dis_like:this.item.dis_likes.length
+                like :this.item.likes_count,
+                dis_like:this.item.dis_likes_count,
             }
         },
         computed: {
@@ -86,10 +85,6 @@
                     })
                 })
             },
-
-            setVote:function () {
-
-            }
         }
     }
 </script>
