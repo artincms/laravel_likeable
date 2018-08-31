@@ -1,76 +1,87 @@
 <template>
     <div>
-        <i v-if="type ==='like'" class="far fa-thumbs-up color_green like pointer" @click="changeLike">{{like}}</i>
-        <i v-else-if="type ==='disLike'" class="far fa-thumbs-down color_red dis_like pointer"  @click="changeLike">{{dis_like}}</i>
-        <i v-else></i>
-        <span class="ml-2"></span>
+        <div v-if="auth" class="float-right">
+            <i class="far fa-thumbs-up color_green pointer" @click="changeLike('like')" :class="{bold:isActiveLike}">{{like}}</i>
+            <i class="far fa-thumbs-down color_red pointer" @click="changeLike('disLike')" :class="{bold:isActiveDislike}">{{dis_like}}</i>
+        </div>
+        <div v-else class="float-right">
+            <i class="far fa-thumbs-up color_gray ">{{like}}</i>
+            <i class="far fa-thumbs-down color_gray">{{dis_like}}</i>
+        </div>
     </div>
 </template>
-
 <script>
     import axios from '../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
+
     export default {
         name: "laravel_likeable_system",
-        props:['model','item','type'],
+        props: ['model', 'item', 'type','auth'],
         data: function () {
             return {
-
+                isActiveLike:false,
+                isActiveDislike:false,
+                like :this.item.likes_count,
+                dis_like:this.item.dis_likes_count,
             }
         },
         computed: {
-            like:{
-                get:function()
-                {
-                    if(this.item.likes)
-                    {
-                        return this.item.likes.length;
-                    }
-                    else
-                    {
-                        return 0 ;
-                    }
-                },
-                set:function(value)
-                {
-                    this.like++;
-                }
-            },
-            dis_like:function () {
-                if(this.item.dis_likes)
-                {
-                    return this.item.dis_likes.length;
-                }
-                else
-                {
-                    return 0 ;
-                }
-            }
         },
         methods: {
-            changeLike: function () {
-                axios.post("/LLS/chnageLike", {encode_id: this.item.encode_id, model: this.model, type: this.type}).then(response => {
+            changeLike: function (type) {
+                axios.post("/LLS/chnageLike", {encode_id: this.item.encode_id, model: this.model, type: type,isActiveLike:this.isActiveLike,isActiveDislike:this.isActiveDislike}).then(response => {
                     this.$nextTick(() => {
-                        if (response.data.success)
-                        {
-                            if (response.data.type =='like')
+                        if (response.data.success) {
+                            if (type == 'like')
                             {
-                                this.set('like');
+                                if(this.isActiveLike)
+                                {
+                                   this.like --;
+                                }
+                                else
+                                {
+                                    if(this.isActiveDislike)
+                                    {
+                                       this.like ++ ;
+                                       this.dis_like -- ;
+                                        this.isActiveDislike = false;
+                                    }
+                                    else
+                                    {
+                                        this.like ++;
+                                    }
+                                }
+                                this.isActiveLike = !this.isActiveLike;
                             }
-                            else if(response.data.type =='disLike')
-                            {
-                                this.dis_like ++;
+                            else if (type == 'disLike') {
+                                if (this.isActiveDislike)
+                                {
+                                    this.dis_like -- ;
+                                }
+                                else
+                                {
+                                    if (this.isActiveLike)
+                                    {
+                                        this.dis_like ++ ;
+                                        this.like --;
+                                        this.isActiveLike = false;
+
+                                    }
+                                    else
+                                    {
+                                        this.dis_like ++ ;
+                                    }
+                                }
+
+                                this.isActiveDislike = !this.isActiveDislike;
                             }
-                            else
-                            {
+                            else {
                                 console.log('you should chose type equal like or disLkie');
                             }
                         }
                         else
                         {
-                            alert('Please check console log');
-                            console.log(this.item);
+                            console.log(response.data);
                         }
-
                     })
                 })
             },
@@ -79,5 +90,20 @@
 </script>
 
 <style scoped>
+    .color_green {
+        color:#27ae60;
+    }
+    .color_red{
+        color:red;
+    }
+    .float-right{
+        float:left!important;
+    }
+    .color_gray{
+        color: #808080;
+    }
+    .bold {
+        font-weight: bold;
+    }
 
 </style>
