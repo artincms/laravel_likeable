@@ -90,7 +90,7 @@
 </script>
 
 <style scoped>
-    @import  '../../../../../public/vendor/laravel_likeable_system/fonts/icon/style.css';
+    @import  './lib/icon/style.css';
     .color_green {
         color:#27ae60;
     }
