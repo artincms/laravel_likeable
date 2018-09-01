@@ -1,17 +1,17 @@
 <template>
     <div>
         <div v-if="auth" class="lgs_float_right text_align_right">
-            <i class="far fa-thumbs-up color_green pointer" @click="changeLike('like')" :class="{bold:isActiveLike}">{{like}}</i>
-            <i class="far fa-thumbs-down color_red pointer" @click="changeLike('disLike')" :class="{bold:isActiveDislike}">{{dis_like}}</i>
+            <i class="lls-icon fa-lls-thumbs-up1 color_green pointer" @click="changeLike('like')" :class="{bold:isActiveLike}">{{like}}</i>
+            <i class="lls-icon fa-lls-thumbs-down1 color_red pointer" @click="changeLike('disLike')" :class="{bold:isActiveDislike}">{{dis_like}}</i>
         </div>
         <div v-else class="lgs_float_right lgs_text_left">
-            <i class="far fa-thumbs-up color_gray ">{{like}}</i>
-            <i class="far fa-thumbs-down color_gray">{{dis_like}}</i>
+            <i class="lls-icon fa-lls-thumbs-up color_gray ">{{like}}</i>
+            <i class="lls-icon fa-lls-thumbs-down1 color_gray">{{dis_like}}</i>
         </div>
     </div>
 </template>
 <script>
-    import axios from '../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
+    import axios from './lib/axios/index.js'
 
     export default {
         name: "laravel_likeable_system",
@@ -35,14 +35,14 @@
                             {
                                 if(this.isActiveLike)
                                 {
-                                   this.like --;
+                                    this.like --;
                                 }
                                 else
                                 {
                                     if(this.isActiveDislike)
                                     {
-                                       this.like ++ ;
-                                       this.dis_like -- ;
+                                        this.like ++ ;
+                                        this.dis_like -- ;
                                         this.isActiveDislike = false;
                                     }
                                     else
@@ -90,6 +90,7 @@
 </script>
 
 <style scoped>
+    @import  '../../../../../public/vendor/laravel_likeable_system/fonts/icon/style.css';
     .color_green {
         color:#27ae60;
     }
