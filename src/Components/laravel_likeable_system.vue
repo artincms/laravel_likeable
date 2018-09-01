@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div v-if="auth" class="float-right">
+        <div v-if="auth" class="lgs_float_right text_align_right">
             <i class="far fa-thumbs-up color_green pointer" @click="changeLike('like')" :class="{bold:isActiveLike}">{{like}}</i>
             <i class="far fa-thumbs-down color_red pointer" @click="changeLike('disLike')" :class="{bold:isActiveDislike}">{{dis_like}}</i>
         </div>
-        <div v-else class="float-right">
+        <div v-else class="lgs_float_right lgs_text_left">
             <i class="far fa-thumbs-up color_gray ">{{like}}</i>
             <i class="far fa-thumbs-down color_gray">{{dis_like}}</i>
         </div>
@@ -95,9 +95,6 @@
     }
     .color_red{
         color:red;
-    }
-    .float-right{
-        float:left!important;
     }
     .color_gray{
         color: #808080;

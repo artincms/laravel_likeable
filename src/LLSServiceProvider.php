@@ -21,11 +21,6 @@ class LLSServiceProvider extends ServiceProvider
 	    $this->loadViewsFrom(__DIR__ . '/Views', 'laravel_likeable_system');
 	    // the main migration folder for create sms_ir tables
 
-	    // for publish the views into main app
-	    $this->publishes([
-		    __DIR__ . '/Views' => resource_path('views/vendor/laravel_likeable_system'),
-	    ]);
-
 	    $this->publishes([
 		    __DIR__ . '/Database/Migrations/' => database_path('migrations')
 	    ], 'migrations');
@@ -40,7 +35,7 @@ class LLSServiceProvider extends ServiceProvider
 		    __DIR__ . '/Config/LLS.php' => config_path('laravel_likeable_system.php'),
 	    ]);
         $this->publishes([
-            __DIR__ . '/Traits/LaraveLikeablesSystem.php' => app_path('Traits/LaravelCommentSystem.php'),
+            __DIR__ . '/Traits/LaraveLikeablesSystem.php' => app_path('Traits/LaraveLikeablesSystem.php'),
         ]);
         $this->publishes([
             __DIR__ . '/Components' => resource_path('assets/js/components/laravel_likeable_system'),
