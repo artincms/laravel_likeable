@@ -3,6 +3,7 @@
 namespace ArtinCMS\LLS\Controllers;
 
 use ArtinCMS\LLS\Models\Like;
+use ArtinCMS\LMM\Models\Morph;
 use Datatables;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -16,6 +17,7 @@ class LikeController extends Controller
     {
         $id = LFM_GetDecodeId($request->encode_id);
         $model = $request->model;
+        $pack = $request->pack;
         $type = $request->type;
         $isActiveLike = $request->isActiveLike;
         $isActiveDislike = $request->isActiveDislike;
@@ -25,18 +27,18 @@ class LikeController extends Controller
             $type_id= '1';
             if($isActiveLike)
             {
-                $this->deleteLike($model,$id,$type_id) ;
+                $this->deleteLike($model,$id,$type_id,'likes',$pack) ;
                 $result['action']='deccreamentLike';
             }
             elseif ($isActiveDislike)
             {
-                $this->deleteLike($model,$id,'-1','disLikes') ;
-                $this->setLike($model,$id,$type_id,$ip);
+                $this->deleteLike($model,$id,'-1','disLikes',$pack) ;
+                $this->setLike($model,$id,$type_id,$ip,$pack);
                 $result['action']='increamentLike';
             }
             else
             {
-                $this->setLike($model,$id,$type_id,$ip);
+                $this->setLike($model,$id,$type_id,$ip,$pack);
                 $result['action']='increamentLike';
             }
 
@@ -46,18 +48,18 @@ class LikeController extends Controller
            $type_id = '-1';
             if($isActiveDislike)
             {
-                $this->deleteLike($model,$id,$type_id,'disLikes') ;
+                $this->deleteLike($model,$id,$type_id,'disLikes',$pack) ;
                 $result['action']='deccreamentDislike';
             }
             elseif ($isActiveLike)
             {
-                $this->deleteLike($model,$id,'1') ;
-                $this->setLike($model,$id,$type_id,$ip);
+                $this->deleteLike($model,$id,'1','likes',$pack) ;
+                $this->setLike($model,$id,$type_id,$ip,$pack);
                 $result['action']='increamentDislike';
             }
             else
             {
-                $this->setLike($model,$id,$type_id,$ip);
+                $this->setLike($model,$id,$type_id,$ip,$pack);
                 $result['action']='increamentDislike';
             }
         }
@@ -67,8 +69,12 @@ class LikeController extends Controller
         return $result;
     }
 
-    public function setLike($model,$id,$type,$ip)
+    public function setLike($model,$id,$type,$ip,$pack)
     {
+        $target_type = Morph::where([
+            ['pck_name',$pack],
+            ['dev_name',$model]
+        ])->first();
         $item = new Like;
         if (Auth::user())
         {
@@ -80,7 +86,7 @@ class LikeController extends Controller
         }
         $item->ip = $ip ;
         $item->target_id = $id;
-        $item->target_type = $model;
+        $item->target_type = $target_type->model_name;
         $item->type = $type;
         $item->save();
         $result = [
@@ -89,9 +95,13 @@ class LikeController extends Controller
         return $result;
     }
 
-    public function deleteLike($model,$id,$type,$relation_name='likes')
+    public function deleteLike($model,$id,$type,$relation_name='likes',$pack)
     {
-        $item=$model::find($id);
+        $target = Morph::where([
+            ['pck_name',$pack],
+            ['dev_name',$model]
+        ])->first();
+        $item=$target->model_name::find($id);
         $likes=$item->$relation_name()->where('type',$type)->orderBy('id','desc')->first();
         $likes->delete();
         return true ;
