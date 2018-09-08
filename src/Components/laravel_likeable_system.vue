@@ -1,8 +1,8 @@
 <template>
     <div>
         <div v-if="auth" class="lgs_float_right text_align_right">
-            <i class="lls-icon fa-lls-thumbs-up1 color_green pointer" @click="changeLike('like')" :class="{bold:isActiveLike}">{{this.like}}</i>
-            <i class="lls-icon fa-lls-thumbs-down1 color_red pointer" @click="changeLike('disLike')" :class="{bold:isActiveDislike}">{{this.dis_like}}</i>
+            <i class="lls-icon fa-lls-thumbs-up1 color_green pointer" @click="changeLike('like')" :class="{bold:isActiveLike}">{{like}}</i>
+            <i class="lls-icon fa-lls-thumbs-down1 color_red pointer" @click="changeLike('disLike')" :class="{bold:isActiveDislike}">{{dis_like}}</i>
         </div>
         <div v-else class="lgs_float_right lgs_text_left">
             <i class="lls-icon fa-lls-thumbs-up color_gray ">{{like}}</i>
@@ -18,14 +18,18 @@
             return {
                 isActiveLike:false,
                 isActiveDislike:false,
-                like : 0,
-                dis_like : 0
             }
         },
         beforeMount() {
           this.properData();  
         },
         computed: {
+            like:function () {
+                return this.likes_count;
+            },
+            dis_like:function () {
+                return this.dis_likes_count;
+            }
         },
         methods: {
             changeLike: function (type) {
@@ -36,19 +40,19 @@
                             {
                                 if(this.isActiveLike)
                                 {
-                                    this.like --;
+                                    this.$parent.likeCount --;
                                 }
                                 else
                                 {
                                     if(this.isActiveDislike)
                                     {
-                                        this.like ++ ;
-                                        this.dis_like -- ;
+                                        this.$parent.likeCount ++ ;
+                                        this.$parent.disLikeCount -- ;
                                         this.isActiveDislike = false;
                                     }
                                     else
                                     {
-                                        this.like ++;
+                                        this.$parent.likeCount ++;
                                     }
                                 }
                                 this.isActiveLike = !this.isActiveLike;
@@ -56,20 +60,20 @@
                             else if (type == 'disLike') {
                                 if (this.isActiveDislike)
                                 {
-                                    this.dis_like -- ;
+                                    this.$parent.disLikeCount -- ;
                                 }
                                 else
                                 {
                                     if (this.isActiveLike)
                                     {
-                                        this.dis_like ++ ;
-                                        this.like --;
+                                        this.$parent.disLikeCount ++ ;
+                                        this.$parent.likeCount --;
                                         this.isActiveLike = false;
 
                                     }
                                     else
                                     {
-                                        this.dis_like ++ ;
+                                        this.$parent.disLikeCount ++ ;
                                     }
                                 }
 
@@ -98,11 +102,7 @@
                     {
                         this.isActiveDislike =true;
                     }
-                    this.like = this.likes_count;
                 }
-                this.like = this.likes_count;
-                this.dis_like = this.dis_likes_count;
-                console.log(this.like,this.dis_like,this.item,this.item.title,this.type);
             }
         }
     }
