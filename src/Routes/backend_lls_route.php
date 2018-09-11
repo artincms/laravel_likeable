@@ -1,4 +1,5 @@
 <?php
-Route::group(['prefix' => config('laravel_comments_system.backend_lcs_route_prefix'), 'namespace' => 'ArtinCMS\LCS\Controllers', 'middleware' => config('laravel_comments_system.backend_lcs_middlewares')], function () {
-
+Route::group(['prefix' => config('laravel_likeable_system.backend_lls_route_prefix'), 'namespace' => 'ArtinCMS\LLS\Controllers', 'middleware' => config('laravel_likeable_system.backend_lls_middlewares')], function () {
+    Route::get('manageLls', ['as' => 'LLS.manageLls', 'uses' => 'LikeController@manageLls']);
+    Route::post('getLikesGrid', ['as' => 'LLS.getLikesGrid', 'uses' => 'LikeController@getLikesGrid']);
 });

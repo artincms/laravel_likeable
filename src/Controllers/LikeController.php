@@ -4,7 +4,7 @@ namespace ArtinCMS\LLS\Controllers;
 
 use ArtinCMS\LLS\Models\Like;
 use ArtinCMS\LMM\Models\Morph;
-use Datatables;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\Request;
@@ -105,5 +105,24 @@ class LikeController extends Controller
         $likes=$item->$relation_name()->where('type',$type)->orderBy('id','desc')->first();
         $likes->delete();
         return true ;
+    }
+
+    public function manageLls(Request $request)
+    {
+        return view('laravel_likeable_system::backend.index');
+    }
+
+    public function getLikesGrid(Request $request)
+    {
+        $like = Like::with('user');
+
+        return Datatables::eloquent($like)
+            ->editColumn('id', function ($data) {
+                return LLS_getEncodeId($data->id);
+            })
+            ->editColumn('created_at', function ($data) {
+                return LLS_Date_GtoJ($data->created_at);
+            })
+            ->make(true);
     }
 }

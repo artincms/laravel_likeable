@@ -19,7 +19,10 @@ class LLSServiceProvider extends ServiceProvider
         $this->loadRoutesFrom( __DIR__.'/Routes/frontend_lls_route.php');
 	    // the main views folder
 	    $this->loadViewsFrom(__DIR__ . '/Views', 'laravel_likeable_system');
-	    // the main migration folder for create sms_ir tables
+
+        $this->publishes([
+            __DIR__ . '/Views' => resource_path('views/vendor/laravel_likeable_system'),
+        ]);
 
 	    $this->publishes([
 		    __DIR__ . '/Database/Migrations/' => database_path('migrations')

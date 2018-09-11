@@ -3,8 +3,8 @@
 return [
 
     /* Important Settings */
-    'backend_lls_middlewares' => ['web','throttle:60,1'],
-    'frontend_lls_middlewares' => ['web'],
+    'backend_lls_middlewares' => ['web'],
+    'frontend_lls_middlewares' => ['web','throttle:60,1'],
     // you can change default route from sms-admin to anything you want
     'backend_lls_route_prefix' => 'LLS',
     'frontend_lls_route_prefix' => 'LLS',
