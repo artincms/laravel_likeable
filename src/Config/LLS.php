@@ -3,18 +3,16 @@
 return [
 
     /* Important Settings */
-    'backend_lls_middlewares' => ['web'],
-    'frontend_lls_middlewares' => ['web','throttle:60,1'],
+    'backend_lls_middlewares' =>  env('BACKEND_LLS_MIDDLEWARES', 'web'),
+    'frontend_lls_middlewares' => env('FRONTEND_LLS_MIDDLEWARES', 'web','throttle:60,1'),
     // you can change default route from sms-admin to anything you want
-    'backend_lls_route_prefix' => 'LLS',
-    'frontend_lls_route_prefix' => 'LLS',
-    // SMS.ir Api Key
-    'api-key' => env('SMSIR-API-KEY','Your api key'),
+    'backend_lls_route_prefix' =>  env('BACKEND_LLS_ROUTE_PERFIX', 'LLS'),
+    'frontend_lls_route_prefix' => env('FRONTEND_LLS_ROUTE_PERFIX', 'LLS'),
     // ======================================================================
-    'userModel'=>'App\User',
-    'Trait' => [
-        'Path' => 'App\Traits\LaraveLikeablesSystem',
-        'Name' => 'LaraveLikeablesSystem',
-        'Method' => 'setDataTableColumn',
-    ]
+    'user_model'                => env('LLS_USER_MODEL', 'App\User'),
+//    'Trait' => [
+//        'Path' => 'App\Traits\LaraveLikeablesSystem',
+//        'Name' => 'LaraveLikeablesSystem',
+//        'Method' => 'setDataTableColumn',
+//    ]
 ];

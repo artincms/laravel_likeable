@@ -19,7 +19,7 @@ class Like extends Model
     }
     public function user()
     {
-        return $this->belongsTo(config('laravel_likeable_system.userModel'), 'user_id');
+        return $this->belongsTo(config('laravel_likeable_system.user_model'), 'user_id');
     }
 
     public function getTargetTypeNameAttribute()
