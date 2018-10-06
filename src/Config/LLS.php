@@ -11,7 +11,7 @@ return [
     // SMS.ir Api Key
     'api-key' => env('SMSIR-API-KEY','Your api key'),
     // ======================================================================
-    'userModel'=>'App\User',
+    'user_model'=>'App\User',
     'Trait' => [
         'Path' => 'App\Traits\LaraveLikeablesSystem',
         'Name' => 'LaraveLikeablesSystem',
