@@ -123,6 +123,12 @@ class LikeController extends Controller
             ->editColumn('created_at', function ($data) {
                 return LLS_Date_GtoJ($data->created_at);
             })
+            ->addColumn('target_type_name', function ($data) {
+                return $data->target_type_name;
+            })
+            ->addColumn('target_value_name', function ($data) {
+                return $data->target_value_name;
+            })
             ->make(true);
     }
 }
